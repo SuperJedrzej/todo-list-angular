@@ -1,0 +1,26 @@
+
+<div class="row">
+  <div class="col-md-3">
+
+  </div>
+  <div class="col-md-6">
+    <div @todosAnimation>
+      <h1 style="text-align:center;">Todos</h1>
+    
+      <input #itemInput
+        class="form-control"
+        (keyup.enter)="addItem(itemInput)">
+    
+      <div *ngIf="items" class="list-group" >
+        <button type="button"
+            @todoAnimation
+            (@todoAnimation.start)="animationStarted($event)"
+            (@todoAnimation.done)="animationDone($event)"
+            *ngFor="let item of items"
+            (click)="removeItem(item)"
+            class="list-group-item"
+            >{{ item }}</button>
+      </div>   
+    </div>
+  </div>
+</div>
