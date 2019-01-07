@@ -1,14 +1,13 @@
-# Stage 0, "build-stage", based on Node.js, to build and compile the frontend
-FROM brereton/rpi3node as build-stage
-WORKDIR /app
-COPY package*.json /app/
-RUN npm install
-COPY ./ /app/
-ARG configuration=production
-RUN npm run build -- --output-path=./dist/out --configuration $configuration
+FROM armhf/alpine
+# can be replaced with just "alpine" on a regular PC
 
-# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
-FROM arm32v7/nginx
-COPY --from=build-stage /app/dist/out/ /usr/share/nginx/html
-# Copy the default nginx.conf provided by tiangolo/node-frontend
-COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
+RUN apk --update add nodejs
+
+WORKDIR /root/
+ADD ./package.json ./package.json
+
+RUN npm i
+COPY dist/todo-list-angular/* /
+
+EXPOSE 3000
+CMD ["npm", "start"]
